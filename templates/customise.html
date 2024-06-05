@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+
+{% block title %}Customise Order{% endblock %}
+
+{% block content %}
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+        <!-- We'll insert an image of the pizza here later -->
+            <h2>{{ pizzaDetails["title"] }}</h2>
+            <img src="/static/{{ pizzaDetails['image'] }}" class="img-thumbnail" width="100%">
+            <p>{{ pizzaDetails['description'] }}</p>
+
+
+        </div>
+        <div class="col-lg-6">
+            <form action="/cart" method="post">
+                <!-- Hidden form field to collect which pizza this is -->
+                <input type="hidden" id="pizza" name="pizza" value="{{ pizza }}">
+
+                <!-- Form field to select size option -->
+                <div class="mb-3">
+                  <label for="size" class="form-label">Size:</label>
+                    <select id="size" name="size" class="form-select">
+                        {% for title, price in sizeOptions.items() %}
+                        <option value="{{title}}">{{title}}
+                            {% if price != 0.0 %}
+                            {{ " (+${:.2f})".format(price) }}
+                            {% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Form field to select base option -->
+                <div class="mb-3">
+                  <label for="base" class="form-label">Base:</label>
+                    <select id="base" name="base" class="form-select">
+                        {% for title, price in baseOptions.items() %}
+                        <option value="{{title}}">{{title}}
+                            {% if price != 0.0 %}
+                            {{ " (+${:.2f})".format(price) }}
+                            {% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Form field to select sauce option -->
+                <div class="mb-3">
+                    Sauce:
+                    <br>
+                    {% for title, price in sauceOptions.items() %}
+                        <input type="radio" class="btn-check" name="sauce" value="{{title}}" id="{{title}}" autocomplete="off" checked>
+                        <label style="margin-top:5px;" class="btn btn-outline-success" for="{{title}}">
+                            {{title}}
+                            {% if price != 0.0 %}
+                            {{ " (+${:.2f})".format(price) }}
+                            {% endif %}
+                        </label>
+                    {% endfor %}
+
+                </div>
+
+                <br>
+                <input type="hidden" id="category" name="category" value="toppingOptions">
+                <!-- Form button to submit the selections -->
+                <div class="d-grid gap-2 col-6">
+                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                </div>
+            </form>
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

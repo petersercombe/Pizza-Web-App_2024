@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block title %}Menu{% endblock %}
+
+{% block content %}
+<br>
+<!--- Collection method: {{ collection }} --->
+<br>
+
+
+
+<div class="row">
+  <div class="col-8">
+  {% set ns = namespace(total = 0) %}
+  {% for item in order %}
+    <div class="card mb-3">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="/static/{{ foodMenu[item[0]][item[1]]['image'] }} " class="card-img-top" alt="...">
+          <center>
+            {% if item[0] == 'toppingOptions' %}
+          <a href="{{ url_for('customise', pizza=item[1]) }}" class="btn btn-primary"><span class="material-symbols-outlined">edit</span></a>
+            {% endif %}
+          <a href="/remove/{{ loop.index - 1 }}" class="btn btn-danger"><span class="material-symbols-outlined">delete</span></a>
+          </center>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ item[1] }}</h5>
+            <small>{{ "${:.2f}".format(item[-1]) }}</small>
+            {% set ns.total = ns.total + item[-1] %}
+            <p class="card-text">
+              <ul style="margin-bottom: 0px">
+                {% for i in range(item|length - 3) %}
+                <li>{{ item[i+2] }}</li>
+                {% endfor %}
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endfor %}
+  </div>
+ <div class="col-4">
+
+    <div class="col">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Payment</h5>
+        <p class="card-text">Total = {{ "${:.2f}".format(ns.total) }}</p>
+      </div>
+      <div class="card-footer">
+          <a href="#" class="btn btn-primary d-grid gap-2">Pay Now</a>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
